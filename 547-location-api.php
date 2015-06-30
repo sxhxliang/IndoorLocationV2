@@ -1,7 +1,7 @@
 <?php
     //Configuration
-    $path_to_discovered = "/home/admin/scripts/discovered.sh";
-    $path_to_associated = "/home/admin/scripts/associated.sh";
+    $path_to_discovered = "/var/www/scripts/discovered.sh";
+    $path_to_associated = "/var/www/scripts/associated.sh";
     //Take input into the script as mac
     $mac_address_raw = @$_GET['mac'];
     if($mac_address_raw == ""){
@@ -24,52 +24,69 @@
     //Parse output
     foreach($output as $line){
         //Take the line and make it into an array exploding by commmas
-        
         $linearr = explode(",",$line);
+
         if($linearr[1] == $mac_address){
             //We found a line of data, parse it
             $one_data = array();
-            $one_data['type'] = "Discovered";
-            foreach($linearr as $data){
-                //Find Last seen
-                if(strpos($data,"00d") === 0){
-                       //Found it!
-                        $one_data['lastSeen'] = $data;
-                }
-                if(strpos($data,"RT") === 0){
-                    //Found the location in the tower
-                    $one_data['name'] = $data;
-                }
-            }
-            array_push($finalData,$one_data);
-        }
+            $one_data['Connection'] = "Discovered";
+            $one_data['Type'] = $linearr[2];
+        	$one_data['Channel'] = $linearr[3];
+        	$one_data['Confirmed-Channel'] = $linearr[4];
+         if(sizeOf($linearr) != 13){
+         		$one_data['SSID'] = "SSID";
+        		$one_data['BSSID'] = $linearr[5];
+        		$one_data['Last'] = $linearr[6];
+        		$one_data['Previous'] = $linearr[7];
+        		$one_data['Current'] = $linearr[8];
+        		$one_data['Packets_Rx'] = $linearr[9];
+        		$one_data['RF_Band'] = $linearr[10];
+        		$one_data['Name'] = $linearr[11];
+        		
+       		 }
+        else{
+        		$one_data['SSID'] = $linearr[5];
+        		$one_data['BSSID'] = $linearr[6];
+        		$one_data['Last'] = $linearr[7];
+        		$one_data['Previous'] = $linearr[8];
+        		$one_data['Current'] = $linearr[9];
+        		$one_data['Packets_Rx'] = $linearr[10];
+        		$one_data['RF_Band'] = $linearr[11];
+        		$one_data['Name'] = $linearr[12];
         
+        	}
+        	array_push($finalData,$one_data);
+        }
+            
     }
+           $output = array();
     exec($path_to_associated." ".$mac_address, $output);
     //Parse output
+ 
+    
     foreach($output as $line){
         //Take the line and make it into an array exploding by commmas
-        
         $linearr = explode(",",$line);
         if($linearr[1] == $mac_address){
             //We found a line of data, parse it
             $one_data = array();
-            $one_data['type'] = "Associated";
-            foreach($linearr as $data){
-                //Find Last seen
-                if(strpos($data,"00d") === 0){
-                       //Found it!
-                        $one_data['lastSeen'] = $data;
-                }
-                if(strpos($data,"RT") === 0){
-                    //Found the location in the tower
-                    $one_data['name'] = $data;
-                }
-            }
+            $one_data['Connection'] = "Associated";
+            $one_data['Type'] = $linearr[2];
+            $one_data['SSID'] = $linearr[3];
+            $one_data['State'] = $linearr[4];
+            $one_data['Encrypt'] = $linearr[5];
+            $one_data['Packets_Rx'] = $linearr[6];
+            $one_data['Packets_Tx'] = $linearr[7];
+            $one_data['Last_Seen'] = $linearr[8];
+            $one_data['Previous'] = $linearr[9];
+            $one_data['Current'] = $linearr[10];
+            $one_data['RF_Band'] = $linearr[11];
+            $one_data['Name'] = $linearr[12];
             array_push($finalData,$one_data);
+            }
+            
         }
         
-    }
     $json_output = json_encode($finalData);
     echo $json_output;
 ?>
