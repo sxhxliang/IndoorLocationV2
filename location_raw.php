@@ -20,7 +20,7 @@ exec("curl ".$location_server."/?mac=".$mac,$content);
 $location_array = json_decode($content[0]);
 $newContent = json_encode($location_array,JSON_FORCE_OBJECT);
 //var_dump($newContent);
-exec("node example.js ".$newContent, $output);
+exec("node location.js ".$newContent, $output);
 echo $output[0];
 //var_dump($output);
 //echo $location_array
