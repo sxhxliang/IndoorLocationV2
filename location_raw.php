@@ -25,7 +25,7 @@ exit;
 $location_final = null;
 //Take the location array and loop looking for "associated"
 foreach($location_array as $location){
-    if($location["type"]=="Associated"){
+    if($location["Connection"]=="Associated"){
         //WE have a location
         $location_final = $location;
     }

@@ -13,6 +13,8 @@
        echo "Mac address is invalid";
        exit;
     }
+    
+      $mac_address = strtolower($mac_address_raw);
     //All validations completed. $mac_address_raw is validated to be in format 00:00:00:00:00:00
     $mac_address = $mac_address_raw;
     //Create an output array
@@ -33,7 +35,7 @@
             $one_data['Type'] = $linearr[2];
         	$one_data['Channel'] = $linearr[3];
         	$one_data['Confirmed-Channel'] = $linearr[4];
-         if(sizeOf($linearr) != 13){
+         if(!preg_match('/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/', $linearr[5]){
          		$one_data['SSID'] = "SSID";
         		$one_data['BSSID'] = $linearr[5];
         		$one_data['Last'] = $linearr[6];
@@ -72,6 +74,19 @@
             $one_data = array();
             $one_data['Connection'] = "Associated";
             $one_data['Type'] = $linearr[2];
+            if($linearr[4] != "ASSOCIATED"){
+            $one_data['SSID'] = "SSID";
+            $one_data['State'] = $linearr[3];
+            $one_data['Encrypt'] = $linearr[4];
+            $one_data['Packets_Rx'] = $linearr[5];
+            $one_data['Packets_Tx'] = $linearr[6];
+            $one_data['Last_Seen'] = $linearr[7];
+            $one_data['Previous'] = $linearr[8];
+            $one_data['Current'] = $linearr[9];
+            $one_data['RF_Band'] = $linearr[10];
+            $one_data['Name'] = $linearr[11];
+            }
+            else{
             $one_data['SSID'] = $linearr[3];
             $one_data['State'] = $linearr[4];
             $one_data['Encrypt'] = $linearr[5];
@@ -82,6 +97,8 @@
             $one_data['Current'] = $linearr[10];
             $one_data['RF_Band'] = $linearr[11];
             $one_data['Name'] = $linearr[12];
+
+            }
             array_push($finalData,$one_data);
             }
             
@@ -90,7 +107,3 @@
     $json_output = json_encode($finalData);
     echo $json_output;
 ?>
-
-
-
-
