@@ -25,17 +25,17 @@
     exec($path_to_discovered." ".$mac_address, $output);
     //Parse output
     foreach($output as $line){
-        //Take the line and make it into an array exploding by commmas
-        $linearr = explode(",",$line);
+  $linearr = explode(",",$line);
 
         if($linearr[1] == $mac_address){
-            //We found a line of data, parse it
+          
+           //We found a line of data, parse it
             $one_data = array();
             $one_data['Connection'] = "Discovered";
             $one_data['Type'] = $linearr[2];
         	$one_data['Channel'] = $linearr[3];
         	$one_data['Confirmed-Channel'] = $linearr[4];
-         if(!preg_match('/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/', $linearr[5]){
+         if(!preg_match('/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/', $linearr[5])){
          		$one_data['SSID'] = "SSID";
         		$one_data['BSSID'] = $linearr[5];
         		$one_data['Last'] = $linearr[6];
@@ -45,7 +45,7 @@
         		$one_data['RF_Band'] = $linearr[10];
         		$one_data['Name'] = $linearr[11];
         		
-       		 }
+       		 	}
         else{
         		$one_data['SSID'] = $linearr[5];
         		$one_data['BSSID'] = $linearr[6];
@@ -55,12 +55,11 @@
         		$one_data['Packets_Rx'] = $linearr[10];
         		$one_data['RF_Band'] = $linearr[11];
         		$one_data['Name'] = $linearr[12];
-        
-        	}
+        		}
         	array_push($finalData,$one_data);
-        }
-            
+                  //Take the line and make it into an array exploding by commmas
     }
+        }
            $output = array();
     exec($path_to_associated." ".$mac_address, $output);
     //Parse output
