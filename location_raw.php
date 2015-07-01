@@ -1,7 +1,7 @@
 <?php
 //header('Content-Type: application/text+xml');
 $mac_address_raw = @$_GET['mac'];
-$location_server = "http://10.47.128.156:8080/index2.php";
+$location_server = "http://10.47.128.156:8080";
 
 if($mac_address_raw == ""){
         echo "You need to provide a mac address!";
@@ -15,11 +15,12 @@ if($mac_address_raw == ""){
 $mac = $mac_address_raw;
 //Pull from servers
 exec("curl ".$location_server."/?mac=".$mac,$content);
-//var_dump($content);
+echo "Content";
+var_dump($content);
 //Parse the $content json into array format
 $location_array = json_decode($content[0]);
 $newContent = json_encode($location_array,JSON_FORCE_OBJECT);
-//var_dump($newContent);
+var_dump($newContent);
 exec("node location.js ".$newContent, $output);
 echo $output[0];
 //var_dump($output);
