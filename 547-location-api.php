@@ -35,7 +35,7 @@
             $one_data['Type'] = $linearr[2];
         	$one_data['Channel'] = $linearr[3];
         	$one_data['Confirmed-Channel'] = $linearr[4];
-         if(!preg_match('/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/', $linearr[5])){
+         if(preg_match('/^([a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2}$/', $linearr[5])){
          		$one_data['SSID'] = "SSID";
         		$one_data['BSSID'] = $linearr[5];
         		$one_data['Last'] = $linearr[6];
