@@ -14,14 +14,14 @@ if($mac_address_raw == ""){
     }
 $mac = $mac_address_raw;
 //Pull from servers
-exec("curl ".$location_server."/?mac=".$mac,$content);
+exec("curl ".$location_server."/?mac=".$mac,$content,$error);
 echo "Content";
 var_dump($content);
 //Parse the $content json into array format
 $location_array = json_decode($content[0]);
 $newContent = json_encode($location_array,JSON_FORCE_OBJECT);
 var_dump($newContent);
-exec("node location.js ".$newContent, $output);
+exec("node location.js ".$newContent, $output,$error);
 echo $output[0];
 //var_dump($output);
 //echo $location_array
